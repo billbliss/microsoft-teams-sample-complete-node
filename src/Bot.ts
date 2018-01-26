@@ -3,12 +3,12 @@ import * as config from "config";
 import { RootDialog } from "./dialogs/RootDialog";
 import { SetLocaleFromTeamsSetting } from "./middleware/SetLocaleFromTeamsSetting";
 import { StripBotAtMentions } from "./middleware/StripBotAtMentions";
-// import { SetAADObjectId } from "./middleware/SetAADObjectId";
 import { LoadBotChannelData } from "./middleware/LoadBotChannelData";
 import { Strings } from "./locale/locale";
 import { loadSessionAsync } from "./utils/DialogUtils";
 import * as teams from "botbuilder-teams";
 import { ComposeExtensionHandlers } from "./composeExtension/ComposeExtensionHandlers";
+import { AADAPI } from "./apis/AADAPI";
 
 // =========================================================
 // Bot Setup
@@ -71,6 +71,40 @@ export class Bot extends builder.UniversalBot {
         {
             let session = await loadSessionAsync(bot, event);
             if (session) {
+                session.sendTyping();
+
+                let eventAsAny = event as any;
+                if (eventAsAny.name === "signin/verifyState") {
+                    let aadApi = new AADAPI();
+                    const graphResource = "https://graph.microsoft.com";
+                    const botRedirectUri = config.get("app.baseUri") + "/bot-auth/simple-end";
+
+                    try
+                    {
+                        // Redeem the authorization code for access & refresh tokens
+                        let queryParams = JSON.parse(eventAsAny.value.state);
+                        console.log(queryParams);
+
+                        let tokenResponse = await aadApi.getAccessTokenV1Async(queryParams.code, botRedirectUri, graphResource);
+                        console.log(tokenResponse);
+
+                        // Save the tokens in the user state (remember to use data store that is encrypted at rest!)
+                        let aadTokens = session.userData.aadTokens || {};
+                        aadTokens[tokenResponse.resource] = tokenResponse;
+                        session.userData.aadTokens = aadTokens;
+                    } catch (e) {
+                        console.log(e);
+                        session.send("There was an error redeeming the authorization code.");
+                        callback(null, "", 200);    // Return success, otherwise chat service will retry the invoke
+                        return;
+                    }
+
+                    // Sign in successful, welcome the user
+                    session.send(`Hello, ${session.message.address.user.name}!`);
+                    callback(null, "", 200);
+                    return;
+                }
+
                 // Clear the stack on invoke, as many builtin dialogs don't play well with invoke
                 // Invoke messages should carry the necessary information to perform their action
                 session.clearDialogStack();
