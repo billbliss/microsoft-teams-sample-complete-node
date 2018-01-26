@@ -16,7 +16,7 @@ export class HeroCardDialog extends TriggerActionDialog {
             buttons.push(new builder.CardAction(session)
                 .type("signin")
                 .title("Sign In")
-                .value(config.get("app.baseUri") + "/bot-auth/simple-start?width=5000&height=5000"),
+                .value(config.get("app.baseUri") + "/bot-auth/simple-start?fallbackUrl=" + config.get("app.baseUri") + "/bot-auth/mobile-error"),
             );
 
             let messageBackButton = builder.CardAction.messageBack(session, JSON.stringify({ action: "getProfile" }), "Get Profile")
