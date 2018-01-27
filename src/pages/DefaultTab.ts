@@ -14,11 +14,13 @@ export class DefaultTab {
                         <title>Bot Info</title>
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <link rel="stylesheet" type="text/css" href="/css/custom.css" >
+                        <link rel="stylesheet" type="text/css" href="/css/msteams-16.css" >
                         <script src='https://statics.teams.microsoft.com/sdk/v1.0/js/MicrosoftTeams.min.js'></script>
                         <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
                     </head>
 
-                    <body>
+                    <body class="theme-light">
                         <p>
                             These are links to the source code for all of the example dialogs given in the template.
                         </p>`;
@@ -41,13 +43,13 @@ export class DefaultTab {
                     <br>
                     <p id="currentTheme">Current theme will show here when you change it in Teams settings - it can be found on the initial load by fetching the context</p>
                     <br>
-                    <button onclick="showAllCommands()">Click to See All Commands</button>
+                    <button onclick="showAllCommands()" class="button-secondary">Click to See All Commands</button>
                     <br>
                     <p>NOTE: Trying to get the deeplink when this is a static tab does not work. This feature only works when this is a configurable tab.</p>
-                    <button onclick="getDeeplink()">Click to get a deeplink to this tab</button>
+                    <button onclick="getDeeplink()" class="button-secondary">Click to get a deeplink to this tab</button>
                     <br>
                     <br>
-                    <button onclick="showContext()">Click to Show Tab's Context</button>
+                    <button onclick="showContext()" class="button-secondary">Click to Show Tab's Context</button>
                     <p id="contextOutput"></p>
                     <script>
                         var microsoftTeams;
