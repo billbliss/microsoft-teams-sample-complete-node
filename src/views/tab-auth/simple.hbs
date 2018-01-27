@@ -30,7 +30,7 @@
         <link rel="stylesheet" type="text/css" href="/css/msteams-16.css" >
         <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     </head>
-    <body>
+    <body class="theme-light">
         <p>
             This sample shows the basics of an authentication/authorization flow in a Microsoft Teams tab.
         </p>
@@ -40,8 +40,8 @@
         </p>
 
         <!-- Login button -->
-        <button onclick="login()">Login to Azure AD</button>
-        <button onclick="loginV2()">Login to Azure AD (V2 endpoint)</button>
+        <button onclick="login()" class="button-secondary">Login to Azure AD</button>
+        <button onclick="loginV2()" class="button-secondary">Login to Azure AD (V2 endpoint)</button>
 
         <!-- Result -->
         <p>
