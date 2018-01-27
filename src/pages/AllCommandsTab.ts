@@ -12,11 +12,13 @@ export class AllCommandsTab {
                         <title>Bot Info</title>
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <link rel="stylesheet" type="text/css" href="/css/custom.css" >
+                        <link rel="stylesheet" type="text/css" href="/css/msteams-16.css" >
                         <script src='https://statics.teams.microsoft.com/sdk/v1.0/js/MicrosoftTeams.min.js'></script>
                         <script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
                     </head>
 
-                    <body>
+                    <body class="theme-light">
                     <p>`;
 
                 let allCommands = "";
