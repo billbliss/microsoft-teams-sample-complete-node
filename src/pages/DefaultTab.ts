@@ -40,21 +40,20 @@ export class DefaultTab {
                     <br>
                     <br>
                     <br>
-                    <br>
-                    <p id="currentTheme">Current theme will show here when you change it in Teams settings - it can be found on the initial load by fetching the context</p>
-                    <br>
                     <button onclick="showAllCommands()" class="button-secondary">Click to See All Commands</button>
                     <br>
                     <p>NOTE: Trying to get the deeplink when this is a static tab does not work. This feature only works when this is a configurable tab.</p>
                     <button onclick="getDeeplink()" class="button-secondary">Click to get a deeplink to this tab</button>
                     <br>
                     <br>
-                    <button onclick="showContext()" class="button-secondary">Click to Show Tab's Context</button>
+                    <button id="showContextButton" onclick="showContext()" class="button-secondary">Click to Show Tab's Context</button>
+                    <p id="currentTheme"></p>
                     <p id="contextOutput"></p>
                     <script>
                         var microsoftTeams;
 
                         $(document).ready(function () {
+                            console.log("page loaded");
                             microsoftTeams.initialize();
                             microsoftTeams.registerOnThemeChangeHandler(function(theme) {
                                 document.getElementById('currentTheme').innerHTML = theme;
@@ -66,12 +65,20 @@ export class DefaultTab {
                         }
 
                         function getDeeplink() {
-                            microsoftTeams.shareDeepLink({subEntityId: 'stuff', subEntityLabel: 'stuff2'});
+                            microsoftTeams.getContext((context) => {
+                                if (context.channelId === "") {
+                                  alert("Deep links to static tabs are not yet supported.");
+                                }
+                                else {
+                                  microsoftTeams.shareDeepLink({subEntityId: 'stuff', subEntityLabel: 'stuff2'});
+                                }
+                            });
                         }
 
                         function showContext() {
                             microsoftTeams.getContext((context) => {
                                 document.getElementById('contextOutput').innerHTML = JSON.stringify(context);
+                                document.getElementById('currentTheme').innerHTML = "Current theme: " + context.theme;
                             });
                         }
                     </script>
